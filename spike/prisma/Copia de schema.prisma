@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuarios {
+  id                      String           @id @default(uuid())
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  nombre                  String
+  apellido                String
+  email                   String           @unique
+  password                String           @unique
+  activo                  Boolean          @default(true)
+  devoluciones            Devoluciones[]
+  prestamos               Prestamos[]
+  transferenciasEmitidas  Transferencias[] @relation("TransferenciasEmitidas")
+  transferenciasRecibidas Transferencias[] @relation("TransferenciasRecibidas")
+}
+
+model Llaves {
+  id             String           @id @default(uuid())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  espacio        String @unique
+  ocupado        Boolean          @default(false)
+  delovoluciones Devoluciones[]
+  prestamos      Prestamos[]
+  transferencias Transferencias[]
+  urls           String?
+}
+
+model Devoluciones {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  usuario   Usuarios @relation(fields: [usuarioId], references: [id])
+  usuarioId String
+  llave     Llaves   @relation(fields: [llaveId], references: [id])
+  llaveId   String
+}
+
+model Prestamos {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  usuario   Usuarios @relation(fields: [usuarioId], references: [id])
+  usuarioId String
+  llave     Llaves   @relation(fields: [llaveId], references: [id])
+  llaveId   String
+}
+
+model Transferencias {
+  id                String   @id @default(uuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  usuarioEmisor     Usuarios @relation("TransferenciasEmitidas", fields: [usuarioEmisorId], references: [id])
+  usuarioEmisorId   String
+  usuarioReceptor   Usuarios @relation("TransferenciasRecibidas", fields: [usuarioReceptorId], references: [id])
+  usuarioReceptorId String
+  llave             Llaves   @relation(fields: [llaveId], references: [id])
+  llaveId           String
+}
+

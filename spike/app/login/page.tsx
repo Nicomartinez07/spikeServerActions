@@ -1,10 +1,5 @@
-// pages/index.js
-import LoginForm from '@/components/LoginForm';
+import LoginForm from "@/components/LoginForm"
 
-export default function HomePage() {
-  return (
-    <div>
-      <LoginForm />
-    </div>
-  );
+export default function LoginPage() {
+  return <LoginForm />
 }

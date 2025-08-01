@@ -24,6 +24,9 @@ const Sidebar: React.FC = () => {
       <Link href="/login" className={linkStyle('/login')}>
         Login
       </Link>
+      <Link href="/register" className={linkStyle('/register')}>
+        Registrarse
+      </Link>
       <a
         href="/tarifario.txt"
         download
